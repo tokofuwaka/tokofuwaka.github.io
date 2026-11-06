@@ -6,25 +6,370 @@
   <title>Family Twerk Factory</title>
   <style>
     :root {
-      --sunshine: #fff7ad;
-      --lemon: #ffe45c;
-      --gold: #f5bb18;
-      --honey: #b87908;
-      --ink: #4a3500;
-      --panel: rgba(255, 255, 255, 0.72);
+      --sunshine: #ffe66d;
+      --lemon: #fff3a6;
+      --gold: #f4bd24;
+      --deep-gold: #9b6700;
+      --ink: #3d3100;
+      --cream: #fffbed;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      min-height: 100vh;
       color: var(--ink);
-      font-family: system-ui, sans-serif;
-      background: linear-gradient(145deg, #fffbd4, #ffe878 55%, #f8c837);
+      background: linear-gradient(145deg, #fffbe2, #ffe875 55%, #ffc928);
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
     }
 
     header {
-      padding: 22px 16px 10px;
+      padding: 24px 16px;
+      text-align: center;
+      background: #ffdf4f;
+      border-bottom: 4px solid var(--deep-gold);
+    }
+
+    h1 { margin: 0; font-size: clamp(2rem, 6vw, 3.5rem); }
+    header p { margin: 6px 0 0; }
+
+    main {
+      width: min(1100px, 94%);
+      margin: 22px auto 50px;
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    }
+
+    section {
+      padding: 18px;
+      background: rgba(255, 253, 239, .94);
+      border: 2px solid #e8b928;
+      border-radius: 18px;
+      box-shadow: 0 5px 0 rgba(155, 103, 0, .18);
+    }
+
+    h2 { margin: 0 0 12px; }
+    .wide { grid-column: 1 / -1; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
       text-align: center;
     }
+
+    .stat {
+      padding: 10px 5px;
+      border-radius: 12px;
+      background: var(--lemon);
+    }
+
+    .stat strong { display: block; font-size: 1.2rem; }
+
+    button {
+      color: var(--ink);
+      background: var(--sunshine);
+      border: 2px solid var(--deep-gold);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      transition: transform .08s, filter .15s;
+    }
+
+    button:hover:not(:disabled) { filter: brightness(1.04); }
+    button:active:not(:disabled) { transform: translateY(2px) scale(.98); }
+    button:disabled { opacity: .48; cursor: not-allowed; }
+
+    #danceButton {
+      width: 100%;
+      min-height: 100px;
+      margin: 14px 0 10px;
+      font-size: 1.45rem;
+      background: linear-gradient(135deg, #fff18a, #ffc928);
+    }
+
+    .family {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .person {
+      padding: 12px 4px;
+      border-radius: 14px;
+      background: #fff3a6;
+      animation: bob 1.6s ease-in-out infinite alternate;
+    }
+
+    .person:nth-child(2) { animation-delay: .2s; }
+    .person:nth-child(3) { animation-delay: .4s; }
+    .person:nth-child(4) { animation-delay: .6s; }
+
+    .face { display: block; font-size: 2.3rem; }
+    .laser { color: #ee4b16; font-size: .75rem; font-weight: 800; }
+
+    @keyframes bob {
+      from { transform: translateY(0) rotate(-2deg); }
+      to { transform: translateY(-7px) rotate(2deg); }
+    }
+
+    #upgradeList {
+      display: grid;
+      gap: 8px;
+      max-height: 450px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .upgrade {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px;
+      border-radius: 12px;
+      background: #fff5bd;
+    }
+
+    .upgrade small { display: block; font-weight: 500; }
+    .upgrade button { flex-shrink: 0; }
+
+    #arcadeStatus { min-height: 24px; }
+    #arcadeButton { background: #ffd84a; }
+    #prestigeButton { background: #ffc928; }
+    .muted { opacity: .78; font-size: .92rem; }
+
+    @media (max-width: 520px) {
+      .family { grid-template-columns: repeat(2, 1fr); }
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌟 Family Twerk Factory 🌟</h1>
+    <p>A goofy, family-friendly dance-party clicker!</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Factory Floor</h2>
+      <div class="stats">
+        <div class="stat">Dance points<strong id="points">0</strong></div>
+        <div class="stat">Per click<strong id="perClick">1</strong></div>
+        <div class="stat">Points / sec<strong id="perSecond">0</strong></div>
+      </div>
+
+      <button id="danceButton">🕺 Make the family dance! 💃</button>
+
+      <div class="family" aria-label="The dancing family">
+        <div class="person"><span class="face">👵</span>Grandma<br><span class="laser">✨ LASER EYES ✨</span></div>
+        <div class="person"><span class="face">👨</span>Dad<br><span class="laser">✨ LASER EYES ✨</span></div>
+        <div class="person"><span class="face">👩</span>Mom<br><span class="laser">✨ LASER EYES ✨</span></div>
+        <div class="person"><span class="face">🧒</span>Kid<br><span class="laser">✨ LASER EYES ✨</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🕹️ Mini Arcade</h2>
+      <p>Start the 10-second dance dash, then tap the button as many times as you can!</p>
+      <p id="arcadeStatus">Ready when you are.</p>
+      <button id="arcadeButton">Start Dance Dash</button>
+      <p class="muted">Each arcade tap earns a bonus point, plus your normal click reward.</p>
+    </section>
+
+    <section class="wide">
+      <h2>🛠️ Factory Upgrades <span id="upgradeCount"></span></h2>
+      <p class="muted">Buy all 50 upgrades to unlock Prestige.</p>
+      <div id="upgradeList"></div>
+    </section>
+
+    <section class="wide">
+      <h2>✨ Prestige</h2>
+      <p id="prestigeInfo">Buy every upgrade to unlock Prestige. It resets your points and upgrades, but gives a permanent production boost.</p>
+      <button id="prestigeButton" disabled>Prestige (locked)</button>
+    </section>
+  </main>
+
+  <script>
+    const SAVE_KEY = "familyTwerkFactorySave";
+
+    const upgradeNames = [
+      "Sparkly Sneakers", "Grandma's Groove", "Dad's Disco Bell", "Mom's Music Mixer",
+      "Kid's Confetti Cannon", "Golden Dance Mat", "Laser Light Show", "Snack Break Boost",
+      "Factory Fan Club", "Turbo Toe-Tappers", "Disco Ball Deluxe", "Moonwalk Manual",
+      "Boogie Speakers", "Glitter Machine", "Dance Floor Polish", "Rhythm Robot",
+      "Golden Tambourine", "Silly Hat Collection", "Factory Sound System", "Party Time Clock",
+      "Super Spin Class", "Lemonade Stand", "Funky Footwork", "Confetti Conveyor",
+      "Grandma's Dance Album", "Dad's Dance Socks", "Mom's Party Playlist", "Kid's Robot Moves",
+      "Sunshine Spotlight", "Golden Groove Gear", "Factory Party Bus", "Extra Bouncy Floor",
+      "Mega Music Button", "Twinkle-Toe Training", "Dance Dash Trophy", "Banana Peel Boogie",
+      "Golden Kazoo", "Disco Duck Assistant", "Ultra Party Popper", "Factory Dance Cam",
+      "Superstar Stage", "Moonbeam Music Box", "Laser Disco Dome", "Infinite Snack Table",
+      "Maximum Groove Mode", "Sunshine Soundtrack", "Royal Dance Parade", "Golden Family Trophy",
+      "Legendary Dance Machine", "The Ultimate Boogie"
+    ];
+
+    function makeUpgrades() {
+      return upgradeNames.map((name, i) => ({
+        name,
+        cost: Math.floor(15 * Math.pow(1.14, i)),
+        type: i % 3 === 2 ? "auto" : "click",
+        amount: Math.max(1, Math.floor(1 + i * 0.7))
+      }));
+    }
+
+    const upgrades = makeUpgrades();
+
+    let state = {
+      points: 0,
+      bought: [],
+      prestige: 0,
+      arcadeEndsAt: 0,
+      arcadeTaps: 0
+    };
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(SAVE_KEY));
+      if (saved && Array.isArray(saved.bought)) {
+        state = { ...state, ...saved };
+      }
+    } catch (error) {
+      console.warn("Save data could not be loaded.", error);
+    }
+
+    const $ = (id) => document.getElementById(id);
+    const multiplier = () => 1 + state.prestige * 0.25;
+
+    function clickPower() {
+      const base = 1 + state.bought.reduce((sum, i) =>
+        sum + (upgrades[i].type === "click" ? upgrades[i].amount : 0), 0);
+      return base * multiplier();
+    }
+
+    function pointsPerSecond() {
+      const base = state.bought.reduce((sum, i) =>
+        sum + (upgrades[i].type === "auto" ? upgrades[i].amount : 0), 0);
+      return base * multiplier();
+    }
+
+    function save() {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    }
+
+    function format(value) {
+      return Math.floor(value).toLocaleString();
+    }
+
+    function render() {
+      $("points").textContent = format(state.points);
+      $("perClick").textContent = format(clickPower());
+      $("perSecond").textContent = format(pointsPerSecond());
+      $("upgradeCount").textContent = `(${state.bought.length}/50)`;
+
+      const list = $("upgradeList");
+      list.innerHTML = "";
+
+      upgrades.forEach((upgrade, i) => {
+        const bought = state.bought.includes(i);
+        const row = document.createElement("div");
+        row.className = "upgrade";
+
+        const details = document.createElement("div");
+        const effect = upgrade.type === "auto"
+          ? `+${upgrade.amount} points/sec`
+          : `+${upgrade.amount} points/click`;
+        details.innerHTML = `<strong>${i + 1}. ${upgrade.name}</strong><small>${effect}</small>`;
+
+        const button = document.createElement("button");
+        button.textContent = bought ? "Owned ✓" : `Buy: ${format(upgrade.cost)}`;
+        button.disabled = bought || state.points < upgrade.cost;
+        button.addEventListener("click", () => buyUpgrade(i));
+
+        row.append(details, button);
+        list.appendChild(row);
+      });
+
+      const allBought = state.bought.length === upgrades.length;
+      $("prestigeButton").disabled = !allBought;
+      $("prestigeButton").textContent = allBought ? "Prestige!" : "Prestige (locked)";
+      $("prestigeInfo").textContent = allBought
+        ? `Ready! Prestige ${state.prestige + 1} resets your points and upgrades and gives +25% permanent production. Current boost: ×${multiplier().toFixed(2)}.`
+        : `Buy every upgrade to unlock Prestige. You have ${state.bought.length} of 50. Current permanent boost: ×${multiplier().toFixed(2)}.`;
+
+      updateArcade();
+    }
+
+    function buyUpgrade(index) {
+      const upgrade = upgrades[index];
+      if (state.bought.includes(index) || state.points < upgrade.cost) return;
+      state.points -= upgrade.cost;
+      state.bought.push(index);
+      save();
+      render();
+    }
+
+    $("danceButton").addEventListener("click", () => {
+      state.points += clickPower();
+      save();
+      render();
+    });
+
+    $("arcadeButton").addEventListener("click", () => {
+      if (state.arcadeEndsAt > Date.now()) {
+        state.arcadeTaps++;
+        state.points += 1 + clickPower();
+        save();
+        render();
+        return;
+      }
+
+      state.arcadeTaps = 0;
+      state.arcadeEndsAt = Date.now() + 10000;
+      render();
+    });
+
+    function updateArcade() {
+      const remaining = Math.max(0, Math.ceil((state.arcadeEndsAt - Date.now()) / 1000));
+      if (remaining > 0) {
+        $("arcadeButton").textContent = "Tap for points!";
+        $("arcadeStatus").textContent = `Dance Dash: ${remaining}s left — ${state.arcadeTaps} taps!`;
+      } else if (state.arcadeEndsAt > 0) {
+        $("arcadeButton").textContent = "Start Dance Dash";
+        $("arcadeStatus").textContent = `Dash complete! You tapped ${state.arcadeTaps} times. Play again?`;
+        state.arcadeEndsAt = 0;
+        save();
+      } else {
+        $("arcadeButton").textContent = "Start Dance Dash";
+      }
+    }
+
+    $("prestigeButton").addEventListener("click", () => {
+      if (state.bought.length !== upgrades.length) return;
+      if (!confirm("Prestige resets your points and upgrades for a permanent +25% boost. Continue?")) return;
+
+      state.points = 0;
+      state.bought = [];
+      state.prestige++;
+      save();
+      render();
+    });
+
+    setInterval(() => {
+      const income = pointsPerSecond();
+      if (income > 0) {
+        state.points += income;
+        save();
+      }
+      render();
+    }, 1000);
+
+    render();
+  </script>
+</body>
+</html>
